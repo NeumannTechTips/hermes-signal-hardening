@@ -41,7 +41,7 @@ Attaching a chat transport to an autonomous agent is a five-minute task. Doing i
 
 This note documents a build that treats the inbound path as the primary control problem rather than an afterthought. It records what works, corrects two points in the upstream documentation that will otherwise cost you an evening, and states the security decisions plainly enough that you could defend them at a review board.
 
-> 💡 **Tooltip (plain English):** an AI agent that can run commands on your computer is powerful and risky. If a stranger can message it, they might be able to make it run those commands. This guide is about closing that door while keeping the useful part.
+> 💡 **Tooltip :** an AI agent that can run commands on your computer is powerful and risky. If a stranger can message it, they might be able to make it run those commands. This guide is about closing that door while keeping the useful part.
 
 The reference host is a Fedora KDE workstation running a locally hosted agent against a local model. The controls generalise to any comparable deployment.
 
@@ -77,7 +77,7 @@ The agent never speaks the Signal protocol directly. It drives a local `signal-c
 
 > Reference architecture, Type 1 view. Stroke colour classifies each component, and the classification is spelled out in the legend, so the diagram still reads in greyscale. All identifiers shown are illustrative.
 
-> 💡 **Tooltip (plain English):** think of `signal-cli` as a second device on your Signal account, like a linked desktop app, but headless. The agent talks to it only over a private internal channel that never leaves the machine.
+> 💡 **Tooltip :** think of `signal-cli` as a second device on your Signal account, like a linked desktop app, but headless. The agent talks to it only over a private internal channel that never leaves the machine.
 
 Three properties of the linked-device model drive the decisions that follow:
 
@@ -99,7 +99,7 @@ A compact model, mapped to recognised categories so it travels:
 | T4 | Data egress | Message bodies and attachments carry content off-host | Tool-layer restriction; the transport itself is unbounded |
 | T5 | Data-at-rest disclosure | Daemon logs clear-text bodies to the journal | `--scrub-log`; journald retention limits |
 
-> 💡 **Tooltip (plain English):** <abbr title="Remote Code Execution: an attacker getting your machine to run their commands from afar">RCE</abbr> is the worst case, someone running commands on your box remotely. <abbr title="Prompt injection: hiding instructions inside content the AI reads, so it obeys the attacker instead of you">Prompt injection</abbr> is subtler, hiding instructions inside a message so the agent follows them. The controls on the right are how each is blunted.
+> 💡 **Tooltip :** <abbr title="Remote Code Execution: an attacker getting your machine to run their commands from afar">RCE</abbr> is the worst case, someone running commands on your box remotely. <abbr title="Prompt injection: hiding instructions inside content the AI reads, so it obeys the attacker instead of you">Prompt injection</abbr> is subtler, hiding instructions inside a message so the agent follows them. The controls on the right are how each is blunted.
 
 ---
 
@@ -135,7 +135,7 @@ signal-cli link -n "AgentHost-Workstation"
 
 > ⚠️ **Link, never register.** `link` enrols a secondary device under your existing identity. `register` claims a number as a fresh primary and will deregister your handset. Only `link` is correct here.
 
-> 💡 **Tooltip (plain English):** linking is like pairing Signal Desktop. Registering is like moving your number to a new phone, which kicks the old one off. You want the first, never the second.
+> 💡 **Tooltip :** linking is like pairing Signal Desktop. Registering is like moving your number to a new phone, which kicks the old one off. You want the first, never the second.
 
 Pull initial state and confirm enrolment:
 
@@ -175,7 +175,7 @@ ss -ltnp | grep 8080     # expect 127.0.0.1:8080, never 0.0.0.0:8080
 
 > ⚠️ **An unauthenticated JSON-RPC endpoint that can send as you must never bind to a routable interface.** A `0.0.0.0` bind is a critical misconfiguration: stop the service and correct the `--http` argument before proceeding.
 
-> 💡 **Tooltip (plain English):** `127.0.0.1` means "this machine only". If you ever see `0.0.0.0`, the service is listening to the whole network, which would let others on your Wi-Fi send messages as you. Fix it immediately.
+> 💡 **Tooltip :** `127.0.0.1` means "this machine only". If you ever see `0.0.0.0`, the service is listening to the whole network, which would let others on your Wi-Fi send messages as you. Fix it immediately.
 
 ### 4. Bind the adapter and scope access
 
@@ -217,7 +217,7 @@ hermes send --to signal:+15551234567 "Dispatch from the agent host"
 - The body is a single double-quoted argument.
 - A bare platform token routes to the configured home channel; an E.164 target routes to that recipient, resolved through the adapter's `listContacts` cache.
 
-> 💡 **Tooltip (plain English):** the phone number must be written in the international format with a plus sign and no spaces, exactly like `+15551234567`. Get that right and the message just sends.
+> 💡 **Tooltip :** the phone number must be written in the international format with a plus sign and no spaces, exactly like `+15551234567`. Get that right and the message just sends.
 
 ### Driving it through the agent
 
@@ -271,7 +271,7 @@ What this strips from the inbound surface, and the rationale:
 
 > ℹ️ The resolver drops unknown or platform-restricted toolset names rather than trusting them, so a typo fails closed. Restart the gateway to load the change.
 
-> 💡 **Tooltip (plain English):** you are handing the messaging channel a short, safe list of abilities instead of the full set. The one powerful ability you keep, the terminal, is the one that makes sending work, so you keep it on purpose and know the risk.
+> 💡 **Tooltip :** you are handing the messaging channel a short, safe list of abilities instead of the full set. The one powerful ability you keep, the terminal, is the one that makes sending work, so you keep it on purpose and know the risk.
 
 ### Keep a deny floor beneath the toolset
 
@@ -308,7 +308,7 @@ print("cli:   ", sorted(_get_platform_tools(cfg, "cli")))
 
 A correctly hardened Signal adapter shows `terminal` present and both the browser set and `code_execution` **absent**, while the CLI profile still lists them. If the two lines match, the restriction has not taken effect and the gateway needs a restart.
 
-> 💡 **Tooltip (plain English):** rather than asking the agent "what can you do", you ask the program itself. That answer cannot be talked around. It is the difference between a claim and a fact.
+> 💡 **Tooltip :** rather than asking the agent "what can you do", you ask the program itself. That answer cannot be talked around. It is the difference between a claim and a fact.
 
 Then run the two end-to-end checks that no log can fabricate:
 
@@ -339,7 +339,7 @@ It is tempting to lock down the local CLI, where untrusted content rarely arrive
 
 > These map cleanly onto recognised agentic-security guidance around **tool misuse**, **excessive agency**, and **insecure defaults**. Treat any inbound messaging adapter as an untrusted input surface and grant it the minimum privilege that still discharges the task.
 
-> 💡 **Tooltip (plain English):** the headline lesson is that the "safe by default" assumption was wrong here. The convenient setting was also the dangerous one, and you have to change it on purpose.
+> 💡 **Tooltip :** the headline lesson is that the "safe by default" assumption was wrong here. The convenient setting was also the dangerous one, and you have to change it on purpose.
 
 ---
 
