@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 1010" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="aSlate" markerWidth="10" markerHeight="8" refX="8" refY="3" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#34495E"/></marker>
+    <marker id="aTeal" markerWidth="10" markerHeight="8" refX="8" refY="3" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#1F7A8C"/></marker>
+    <marker id="aGreen" markerWidth="10" markerHeight="8" refX="8" refY="3" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#2E7D32"/></marker>
+    <marker id="aAmber" markerWidth="10" markerHeight="8" refX="8" refY="3" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#E4A11B"/></marker>
+    <marker id="aRed" markerWidth="10" markerHeight="8" refX="8" refY="3" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#C0392B"/></marker>
+    <marker id="aGrey" markerWidth="10" markerHeight="8" refX="8" refY="3" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#6B7C8C"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1700" height="1010" fill="#FFFFFF"/>
+
+  <!-- framing panels -->
+  <rect x="20" y="360" width="525" height="185" rx="8" fill="none" stroke="#8FA9BC" stroke-width="1.2" stroke-dasharray="6 4"/>
+  <text x="34" y="380" font-size="12" font-weight="bold" fill="#0B3D5C">External / untrusted</text>
+  <rect x="615" y="360" width="335" height="405" rx="8" fill="none" stroke="#8FA9BC" stroke-width="1.2" stroke-dasharray="6 4"/>
+  <text x="629" y="380" font-size="12" font-weight="bold" fill="#0B3D5C">Local daemon (loopback)</text>
+  <rect x="1020" y="160" width="340" height="455" rx="8" fill="none" stroke="#8FA9BC" stroke-width="1.2" stroke-dasharray="6 4"/>
+  <text x="1034" y="180" font-size="12" font-weight="bold" fill="#0B3D5C">Agent host</text>
+  <rect x="1385" y="160" width="280" height="320" rx="8" fill="none" stroke="#8FA9BC" stroke-width="1.2" stroke-dasharray="6 4"/>
+  <text x="1399" y="180" font-size="12" font-weight="bold" fill="#0B3D5C">Config &amp; controls</text>
+
+  <!-- title -->
+  <text x="40" y="42" font-size="23" font-weight="bold" fill="#0B3D5C">Hermes Agent on Signal: Hardened Reference Architecture</text>
+  <text x="40" y="68" font-size="13" fill="#6B7C8C">Loopback-bound linked-device gateway with a per-channel least-privilege toolset · Type 1 view</text>
+
+  <!-- edges (drawn before nodes so nodes sit on top of any endpoint) -->
+  <!-- E1 phone<->servers -->
+  <polyline points="250,460 300,460" fill="none" stroke="#34495E" stroke-width="2" stroke-dasharray="6 4" marker-start="url(#aSlate)" marker-end="url(#aSlate)"/>
+  <rect x="233" y="527" width="84" height="16" fill="#FFFFFF"/>
+  <text x="275" y="539" font-size="10.5" font-weight="bold" fill="#34495E" text-anchor="middle">cloud chat</text>
+  <!-- E2 servers->daemon -->
+  <polyline points="530,460 590,460 590,470 650,470" fill="none" stroke="#34495E" stroke-width="2.2" marker-end="url(#aSlate)"/>
+  <rect x="536" y="440" width="108" height="16" fill="#FFFFFF"/>
+  <text x="590" y="452" font-size="10.5" font-weight="bold" fill="#34495E" text-anchor="middle">linked-device sync</text>
+  <!-- E3 daemon<->gateway -->
+  <polyline points="930,415 990,415 990,255 1050,255" fill="none" stroke="#1F7A8C" stroke-width="2.2" marker-start="url(#aTeal)" marker-end="url(#aTeal)"/>
+  <rect x="997" y="300" width="150" height="34" fill="#FFFFFF"/>
+  <text x="1003" y="314" font-size="10.5" font-weight="bold" fill="#1F7A8C">loopback HTTP :8080</text>
+  <text x="1003" y="328" font-size="10.5" font-weight="bold" fill="#1F7A8C">inbound / reply</text>
+  <!-- E4 gateway->terminal -->
+  <polyline points="1195,320 1195,350" fill="none" stroke="#1F7A8C" stroke-width="2.2" marker-end="url(#aTeal)"/>
+  <rect x="1201" y="327" width="52" height="16" fill="#FFFFFF"/>
+  <text x="1205" y="339" font-size="10.5" font-weight="bold" fill="#1F7A8C">tool call</text>
+  <!-- E5 terminal->send (finding) -->
+  <polyline points="1195,450 1195,490" fill="none" stroke="#C0392B" stroke-width="2.2" stroke-dasharray="6 4" marker-end="url(#aRed)"/>
+  <rect x="1201" y="461" width="196" height="16" fill="#FFFFFF"/>
+  <text x="1205" y="473" font-size="10.5" font-weight="bold" fill="#C0392B">shell exec → defeats send guard</text>
+  <!-- E6 send->daemon (outbound loop) -->
+  <polyline points="1050,540 985,540 985,510 930,510" fill="none" stroke="#2E7D32" stroke-width="2.2" marker-end="url(#aGreen)"/>
+  <rect x="905" y="546" width="150" height="16" fill="#FFFFFF"/>
+  <text x="980" y="558" font-size="10.5" font-weight="bold" fill="#2E7D32" text-anchor="middle">queue outbound (loopback)</text>
+  <!-- E7 daemon->journal -->
+  <polyline points="790,560 790,620" fill="none" stroke="#E4A11B" stroke-width="2.2" marker-end="url(#aAmber)"/>
+  <rect x="796" y="582" width="170" height="16" fill="#FFFFFF"/>
+  <text x="800" y="594" font-size="10.5" font-weight="bold" fill="#E4A11B">message bodies → --scrub-log</text>
+  <!-- E8 config->gateway -->
+  <polyline points="1400,250 1370,250 1370,255 1340,255" fill="none" stroke="#1F7A8C" stroke-width="2" stroke-dasharray="8 8" marker-end="url(#aTeal)"/>
+  <rect x="1300" y="230" width="150" height="16" fill="#FFFFFF"/>
+  <text x="1375" y="242" font-size="10.5" font-weight="bold" fill="#1F7A8C" text-anchor="middle">config + toolset (600)</text>
+  <!-- E9 deny->terminal -->
+  <polyline points="1400,405 1370,405 1370,400 1340,400" fill="none" stroke="#6B7C8C" stroke-width="2" stroke-dasharray="8 8" marker-end="url(#aGrey)"/>
+  <rect x="1305" y="381" width="140" height="16" fill="#FFFFFF"/>
+  <text x="1375" y="393" font-size="10.5" font-weight="bold" fill="#6B7C8C" text-anchor="middle">deny floor (pre-bypass)</text>
+
+  <!-- nodes -->
+  <!-- Phone -->
+  <rect x="40" y="400" width="210" height="120" rx="9" fill="#EEF1F4" stroke="#34495E" stroke-width="1.8"/>
+  <text x="52" y="424" font-size="12.5" font-weight="bold" fill="#1B2A33">Phone (primary device)</text>
+  <text x="52" y="444" font-size="11.5" fill="#1B2A33">Holds the Signal account.</text>
+  <text x="52" y="461" font-size="11.5" fill="#1B2A33">Stays primary; approves</text>
+  <text x="52" y="478" font-size="11.5" fill="#1B2A33">the device link.</text>
+  <!-- Servers -->
+  <rect x="300" y="400" width="230" height="120" rx="9" fill="#EEF1F4" stroke="#34495E" stroke-width="1.8"/>
+  <text x="312" y="424" font-size="12.5" font-weight="bold" fill="#1B2A33">Signal servers</text>
+  <text x="312" y="444" font-size="11.5" fill="#1B2A33">Cloud relay. End-to-end</text>
+  <text x="312" y="461" font-size="11.5" fill="#1B2A33">encrypted between devices;</text>
+  <text x="312" y="478" font-size="11.5" fill="#1B2A33">not a host trust anchor.</text>
+  <!-- Daemon -->
+  <rect x="650" y="380" width="280" height="180" rx="9" fill="#E7F3E8" stroke="#2E7D32" stroke-width="1.8"/>
+  <text x="662" y="406" font-size="12.5" font-weight="bold" fill="#1B2A33">signal-cli daemon</text>
+  <text x="662" y="428" font-size="11.5" fill="#1B2A33">Linked secondary device.</text>
+  <text x="662" y="446" font-size="11.5" fill="#1B2A33">HTTP bound to</text>
+  <text x="662" y="463" font-size="11.5" fill="#1B2A33">127.0.0.1:8080 only.</text>
+  <text x="662" y="483" font-size="11.5" fill="#1B2A33">Sends and receives as</text>
+  <text x="662" y="500" font-size="11.5" fill="#1B2A33">the account.</text>
+  <!-- Gateway -->
+  <rect x="1050" y="190" width="290" height="130" rx="9" fill="#E4F1F4" stroke="#1F7A8C" stroke-width="1.8"/>
+  <text x="1062" y="214" font-size="12.5" font-weight="bold" fill="#1B2A33">Agent gateway (Signal)</text>
+  <text x="1062" y="234" font-size="11.5" fill="#1B2A33">Narrowed toolset: no browser,</text>
+  <text x="1062" y="251" font-size="11.5" fill="#1B2A33">no code execution, no</text>
+  <text x="1062" y="268" font-size="11.5" fill="#1B2A33">scheduler, no delegation.</text>
+  <text x="1062" y="288" font-size="11.5" fill="#1B2A33">Denies unknown senders.</text>
+  <!-- Terminal -->
+  <rect x="1050" y="350" width="290" height="100" rx="9" fill="#FDF3DF" stroke="#E4A11B" stroke-width="1.8"/>
+  <text x="1062" y="374" font-size="12.5" font-weight="bold" fill="#1B2A33">terminal tool (retained)</text>
+  <text x="1062" y="394" font-size="11.5" fill="#1B2A33">The one broad tool kept on</text>
+  <text x="1062" y="411" font-size="11.5" fill="#1B2A33">the channel. The honest cost</text>
+  <text x="1062" y="428" font-size="11.5" fill="#1B2A33">of outbound sending.</text>
+  <!-- Send -->
+  <rect x="1050" y="490" width="290" height="100" rx="9" fill="#E7F3E8" stroke="#2E7D32" stroke-width="1.8"/>
+  <text x="1062" y="514" font-size="12.5" font-weight="bold" fill="#1B2A33">hermes send (CLI)</text>
+  <text x="1062" y="534" font-size="11.5" fill="#1B2A33">Supported outbound path.</text>
+  <text x="1062" y="551" font-size="11.5" fill="#1B2A33">Addresses any contact in</text>
+  <text x="1062" y="568" font-size="11.5" fill="#1B2A33">E.164 form.</text>
+
+  <!-- Journal cylinder -->
+  <path d="M670,632 L670,738 A120,12 0 0 0 910,738 L910,632" fill="#FDF3DF" stroke="#E4A11B" stroke-width="1.8"/>
+  <ellipse cx="790" cy="632" rx="120" ry="12" fill="#FDF3DF" stroke="#E4A11B" stroke-width="1.8"/>
+  <text x="790" y="662" font-size="12" font-weight="bold" fill="#1B2A33" text-anchor="middle">System journal</text>
+  <text x="790" y="682" font-size="11" fill="#1B2A33" text-anchor="middle">Bodies logged in clear text.</text>
+  <text x="790" y="699" font-size="11" fill="#1B2A33" text-anchor="middle">Fix: --scrub-log.</text>
+
+  <!-- Config cylinder -->
+  <path d="M1400,202 L1400,298 A125,12 0 0 0 1650,298 L1650,202" fill="#E4F1F4" stroke="#1F7A8C" stroke-width="1.8"/>
+  <ellipse cx="1525" cy="202" rx="125" ry="12" fill="#E4F1F4" stroke="#1F7A8C" stroke-width="1.8"/>
+  <text x="1525" y="232" font-size="12" font-weight="bold" fill="#1B2A33" text-anchor="middle">config.yaml + .env</text>
+  <text x="1525" y="252" font-size="11" fill="#1B2A33" text-anchor="middle">Toolset and credentials.</text>
+  <text x="1525" y="269" font-size="11" fill="#1B2A33" text-anchor="middle">Mode 600.</text>
+
+  <!-- Deny -->
+  <rect x="1400" y="350" width="250" height="110" rx="9" fill="#E4F1F4" stroke="#1F7A8C" stroke-width="1.8"/>
+  <text x="1412" y="374" font-size="12.5" font-weight="bold" fill="#1B2A33">approvals.deny floor</text>
+  <text x="1412" y="394" font-size="11.5" fill="#1B2A33">Pattern block evaluated</text>
+  <text x="1412" y="411" font-size="11.5" fill="#1B2A33">before any bypass.</text>
+
+  <!-- Legend -->
+  <rect x="1385" y="500" width="280" height="258" rx="9" fill="#FBFDFE" stroke="#6B7C8C" stroke-width="1.3" stroke-dasharray="6 4"/>
+  <text x="1401" y="524" font-size="12.5" font-weight="bold" fill="#0B3D5C">Classification</text>
+  <rect x="1401" y="540" width="16" height="12" fill="#E7F3E8" stroke="#2E7D32" stroke-width="1.6"/>
+  <text x="1425" y="550" font-size="11" fill="#34495E">Trusted local service</text>
+  <rect x="1401" y="566" width="16" height="12" fill="#E4F1F4" stroke="#1F7A8C" stroke-width="1.6"/>
+  <text x="1425" y="576" font-size="11" fill="#34495E">Agent gateway &amp; controls</text>
+  <rect x="1401" y="592" width="16" height="12" fill="#FDF3DF" stroke="#E4A11B" stroke-width="1.6"/>
+  <text x="1425" y="602" font-size="11" fill="#34495E">Attention / residual risk</text>
+  <rect x="1401" y="618" width="16" height="12" fill="#EEF1F4" stroke="#34495E" stroke-width="1.6"/>
+  <text x="1425" y="628" font-size="11" fill="#34495E">External / untrusted</text>
+  <line x1="1401" y1="650" x2="1417" y2="650" stroke="#C0392B" stroke-width="2.4" stroke-dasharray="5 3"/>
+  <text x="1425" y="654" font-size="11" fill="#34495E">Security finding path</text>
+  <line x1="1401" y1="676" x2="1417" y2="676" stroke="#6B7C8C" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="1425" y="680" font-size="11" fill="#34495E">Control / config link</text>
+  <text x="1401" y="706" font-size="10.5" fill="#6B7C8C">Solid arrow = data / message flow.</text>
+  <text x="1401" y="722" font-size="10.5" fill="#6B7C8C">Double arrow = bidirectional.</text>
+  <text x="1401" y="738" font-size="10.5" fill="#6B7C8C">Reads in greyscale by position.</text>
+
+  <!-- Narrative note -->
+  <rect x="40" y="795" width="1310" height="150" rx="7" fill="#FFF7E6" stroke="#E4A11B" stroke-width="1.4"/>
+  <text x="56" y="820" font-size="12.5" font-weight="bold" fill="#0B3D5C">Why this shape</text>
+  <text x="56" y="842" font-size="11.5" fill="#34495E">The workstation attaches to Signal as a linked secondary device, so the daemon binds to loopback alone and the phone stays primary.</text>
+  <text x="56" y="861" font-size="11.5" fill="#34495E">The Signal channel runs a deliberately narrowed toolset. Retaining the terminal, however, lets the agent reach the hermes send CLI and</text>
+  <text x="56" y="880" font-size="11.5" fill="#34495E">message any contact, which restores the very capability the framework withholds from the agent loop; the trade is made knowingly.</text>
+  <text x="56" y="899" font-size="11.5" fill="#34495E">The daemon writes message bodies to the system journal in clear text, mitigated with --scrub-log. Access control (an allow-list of one</text>
+  <text x="56" y="918" font-size="11.5" fill="#34495E">number, groups ignored) is the single control between an inbound message and a shell, so it is load-bearing rather than optional.</text>
+
+  <!-- version line -->
+  <text x="40" y="972" font-size="11" fill="#6B7C8C">Reference architecture · Type 1 view · Author: NeumannTechTips · v1.0 · August 2026 · All identifiers illustrative</text>
+</svg>
